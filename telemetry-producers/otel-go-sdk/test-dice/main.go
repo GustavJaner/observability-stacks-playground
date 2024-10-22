@@ -15,6 +15,8 @@ import (
 	"go.opentelemetry.io/otel/sdk/resource"
 )
 
+const periodicReaderIntervalSeconds = 5
+
 func main() {
 	// 1. Create resource
 	res, err := newResource()
@@ -41,6 +43,7 @@ func main() {
 	// and accessed using otel.GetMeterProvider.
 	otel.SetMeterProvider(meterProvider)
 
+	log.Println("Starting server. Go to localhost:8080/rolldice")
 	http.HandleFunc("/rolldice", rolldice)
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
@@ -81,7 +84,7 @@ func newMeterProvider(res *resource.Resource, grpc bool) (*metric.MeterProvider,
 
 	meterProvider := metric.NewMeterProvider(
 		metric.WithResource(res),
-		metric.WithReader(metric.NewPeriodicReader(metricExporter, metric.WithInterval(5*time.Second))), // PeriodicReader is a Reader that continuously collects and exports metric data at a set interval.
+		metric.WithReader(metric.NewPeriodicReader(metricExporter, metric.WithInterval(periodicReaderIntervalSeconds*time.Second))), // PeriodicReader is a Reader that continuously collects and exports metric data at a set interval.
 	)
 	return meterProvider, nil
 }

@@ -20,13 +20,12 @@ exporters:
     path: ./filename.json
 
   # Data sources: traces, metrics, logs
-  # NOTE: Prior to v0.86.0 use `logging` instead of `debug`
-  debug:
+  debug: # This will export/print the data to stdout
     verbosity: detailed
 
   # Data sources: metrics
   prometheus:
-    endpoint: localhost:8889
+    endpoint: 0.0.0.0:8889
     namespace: default
 
 # Any of the components configured above must be defined in the service section to be enabled
@@ -36,4 +35,4 @@ service:
   pipelines:
     metrics:
       receivers: [otlp]
-      exporters: [debug, prometheus]
+      exporters: [debug, prometheus] # Export to stdout and Prometheus

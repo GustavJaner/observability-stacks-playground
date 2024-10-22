@@ -10,7 +10,7 @@ datasources:
     jsonData:
       httpMethod: POST
       queryTimeout: 30s
-      timeInterval: 10s
+      timeInterval: 5s
       manageAlerts: true
       prometheusType: Prometheus
       prometheusVersion: "2.50.x"

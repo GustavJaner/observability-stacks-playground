@@ -48,7 +48,7 @@ func rolldice(w http.ResponseWriter, r *http.Request) {
 
 	rollCount.Add(ctx, 1, metric.WithAttributes(attribute.String("endpoint", "rolldice")))
 	rollSum.Add(ctx, int64(roll), metric.WithAttributes(attribute.String("endpoint", "rolldice")))
-	rollSum.Add(ctx, 1, metric.WithAttributes(attribute.String("endpoint", "rolldice"), attribute.String("test", "foo")))
+	// rollSum.Add(ctx, 1, metric.WithAttributes(attribute.String("endpoint", "rolldice"), attribute.String("test", "foo")))
 
 	resp := strconv.Itoa(roll) + "\n"
 	if _, err := io.WriteString(w, resp); err != nil {
