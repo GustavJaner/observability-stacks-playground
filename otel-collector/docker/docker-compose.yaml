@@ -1,6 +1,4 @@
-version: '0.1'
-
-services:  
+services:
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.103.1
     volumes:

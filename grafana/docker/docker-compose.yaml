@@ -5,8 +5,9 @@ services:
     restart: unless-stopped
     volumes:
       - ./grafana-config-custom.ini:/etc/grafana/grafana.ini
-      - ./grafana-storage:/var/lib/grafana # This will use the local volume in this directory. If it doesn't exist, it will be created
+      - ./grafana-storage:/var/lib/grafana # This will use the local volume in this directory. If it doesn't exist, it will be created. Useful for persisitng dashboards clicked in the UI
       # - grafana-storage:/var/lib/grafana # If the Docker volume: uncomment the volumes section below
+      - ./provisioning/datasources:/etc/grafana/provisioning/datasources # Provision data sources IaC
     ports:
      - "3000:3000"
 
