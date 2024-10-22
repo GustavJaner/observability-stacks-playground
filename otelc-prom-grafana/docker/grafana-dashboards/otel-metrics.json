@@ -102,7 +102,6 @@
           "options": {
             "legend": {
               "calcs": [
-                "max",
                 "lastNotNull"
               ],
               "displayMode": "table",
@@ -124,14 +123,14 @@
                 "uid": "${ds_prometheus}"
               },
               "editorMode": "code",
-              "expr": "sum by(__name__) ({job=\"prometheus\"})",
+              "expr": "count by(__name__) ({job=\"prometheus\"})",
               "instant": false,
               "legendFormat": "__auto",
               "range": true,
               "refId": "A"
             }
           ],
-          "title": "job=\"prometheus\"",
+          "title": "count by(__name__) ({job=\"prometheus\"})",
           "type": "timeseries"
         }
       ],
@@ -218,7 +217,6 @@
           "options": {
             "legend": {
               "calcs": [
-                "max",
                 "lastNotNull"
               ],
               "displayMode": "table",
@@ -240,14 +238,14 @@
                 "uid": "${ds_prometheus}"
               },
               "editorMode": "code",
-              "expr": "sum by(__name__) ({job=\"otel-collector-internal\"})",
+              "expr": "count by(__name__) ({job=\"otel-collector-internal\"})",
               "instant": false,
               "legendFormat": "__auto",
               "range": true,
               "refId": "A"
             }
           ],
-          "title": "job=\"otel-collector-internal\"",
+          "title": "count by(__name__) ({job=\"otel-collector-internal\"})",
           "type": "timeseries"
         }
       ],
@@ -337,7 +335,6 @@
       "options": {
         "legend": {
           "calcs": [
-            "max",
             "lastNotNull"
           ],
           "displayMode": "table",
@@ -359,14 +356,14 @@
             "uid": "${ds_prometheus}"
           },
           "editorMode": "code",
-          "expr": "sum by(__name__) ({job=\"otel-collector-prom-exporter\"})",
+          "expr": "count by(__name__) ({job=\"otel-collector-prom-exporter\"})",
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "job=\"otel-collector-prom-exporter\"",
+      "title": "count by(__name__) ({job=\"otel-collector-prom-exporter\"})",
       "type": "timeseries"
     },
     {

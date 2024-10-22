@@ -15,7 +15,10 @@ import (
 	"go.opentelemetry.io/otel/sdk/resource"
 )
 
-const periodicReaderIntervalSeconds = 5
+const (
+	periodicReaderIntervalSeconds = 5
+	temporality                   = "delta" // Values: "delta" or "cumulative"
+)
 
 func main() {
 	// 1. Create resource
@@ -64,6 +67,17 @@ func newResource() (*resource.Resource, error) {
 	)
 }
 
+func TemporalitySelector(temporality string) metric.TemporalitySelector {
+	return func(kind metric.InstrumentKind) metricdata.Temporality {
+		if temporality == "delta" {
+			return metricdata.DeltaTemporality
+		} else if temporality == "cumulative" {
+			return metricdata.CumulativeTemporality
+		}
+		return metricdata.CumulativeTemporality // Default to cumulative
+	}
+}
+
 func newMeterProvider(res *resource.Resource, grpc bool) (*metric.MeterProvider, error) {
 	ctx := context.Background() // Create a context for the gRPC exporter client
 	var metricExporter metric.Exporter
@@ -75,15 +89,14 @@ func newMeterProvider(res *resource.Resource, grpc bool) (*metric.MeterProvider,
 			ctx,
 			otlpmetricgrpc.WithEndpoint("localhost:4317"),
 			otlpmetricgrpc.WithInsecure(),
-			otlpmetricgrpc.WithTemporalitySelector(func(kind metric.InstrumentKind) metricdata.Temporality { return metricdata.DeltaTemporality }),
+			otlpmetricgrpc.WithTemporalitySelector(TemporalitySelector(temporality)),
 		)
 	} else {
 		log.Println("Using stdout exporter")
 		metricExporter, err = stdoutmetric.New( // stdout for debug purposes. Otherwise we use otlpmetricgrpc to export metrics to the OTEL Collector
 			stdoutmetric.WithPrettyPrint(),
-			stdoutmetric.WithTemporalitySelector(func(kind metric.InstrumentKind) metricdata.Temporality { return metricdata.DeltaTemporality }),
+			stdoutmetric.WithTemporalitySelector(TemporalitySelector(temporality)),
 		)
-
 	}
 	if err != nil {
 		return nil, err
@@ -91,7 +104,10 @@ func newMeterProvider(res *resource.Resource, grpc bool) (*metric.MeterProvider,
 
 	meterProvider := metric.NewMeterProvider(
 		metric.WithResource(res),
-		metric.WithReader(metric.NewPeriodicReader(metricExporter, metric.WithInterval(periodicReaderIntervalSeconds*time.Second))), // PeriodicReader is a Reader that continuously collects and exports metric data at a set interval.
+		metric.WithReader(metric.NewPeriodicReader(
+			metricExporter,
+			metric.WithInterval(periodicReaderIntervalSeconds*time.Second),
+		)), // PeriodicReader is a Reader that continuously collects and exports metric data at a set interval.
 	)
 	return meterProvider, nil
 }
