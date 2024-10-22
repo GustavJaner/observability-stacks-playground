@@ -1,0 +1,39 @@
+version: '3.7'
+
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.103.1
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
+    ports:
+      - 1888:1888   # pprof extension
+      - 8888:8888   # Prometheus metrics exposed by the Collector
+      - 8889:8889   # Prometheus exporter metrics
+      - 13133:13133 # health_check extension
+      - 4317:4317   # OTLP gRPC receiver
+      - 4318:4318   # OTLP http receiver
+      - 55679:55679 # zpages extension
+
+  prometheus:
+    image: prom/prometheus:v2.55.0 # or :latest
+    volumes:
+      - ./prometheus-config.yaml:/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    depends_on:
+      - otel-collector
+
+  grafana:
+    image: grafana/grafana:11.2.3 # or grafana/grafana-enterprise or grafana/grafana-oss
+    restart: unless-stopped
+    volumes:
+      - ./grafana-config.ini:/etc/grafana/grafana.ini # Override default config
+      - ./grafana-provisioning/datasources:/etc/grafana/provisioning/datasources # Provision data sources IaC
+      - ./grafana-provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana-dashboards:/var/lib/grafana/dashboards
+      # - ./grafana-storage:/var/lib/grafana # This will use the local volume in this directory. If it doesn't exist, it will be created. Useful for persisitng dashboards clicked in the UI
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus
+      - otel-collector
