@@ -1,0 +1,14 @@
+services:
+  grafana:
+    image: grafana/grafana:11.2.3 # or grafana/grafana-enterprise or grafana/grafana-oss
+    # container_name: grafana
+    restart: unless-stopped
+    volumes:
+      - ./grafana-config-custom.ini:/etc/grafana/grafana.ini
+      - ./grafana-storage:/var/lib/grafana # This will use the local volume in this directory. If it doesn't exist, it will be created
+      # - grafana-storage:/var/lib/grafana # If the Docker volume: uncomment the volumes section below
+    ports:
+     - "3000:3000"
+
+# volumes:
+#  grafana-storage: {} # This will create and manage a volume in Docker
