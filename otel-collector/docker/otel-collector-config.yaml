@@ -1,0 +1,39 @@
+# Component configuration
+
+# Extensions are optional components that expand the capabilities of the Collector to accomplish tasks not directly involved with processing telemetry data
+extensions:
+  health_check: # Health Check extension enables an HTTP url that can be probed to check the status of the OpenTelemetry Collector. This extension can be used as a liveness and/or readiness probe on Kubernetes.
+  pprof: # Performance Profiler extension enables the golang net/http/pprof endpoint. This is typically used by developers to collect performance profiles and investigate issues with the service.
+  zpages: # Enables an extension that serves zPages, an HTTP endpoint that provides live data for debugging different components that were properly instrumented for such. All core exporters and receivers provide some zPage instrumentation.
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+exporters:
+  # Data sources: traces, metrics, logs
+  file:
+    path: ./filename.json
+
+  # Data sources: traces, metrics, logs
+  # NOTE: Prior to v0.86.0 use `logging` instead of `debug`
+  debug:
+    verbosity: detailed
+
+  # Data sources: metrics
+  prometheus:
+    endpoint: localhost:8889
+    namespace: default
+
+# Any of the components configured above must be defined in the service section to be enabled
+service:
+  extensions: [zpages]
+
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      exporters: [debug, prometheus]

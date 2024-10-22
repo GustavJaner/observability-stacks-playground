@@ -1,0 +1,296 @@
+{
+	"Resource": [
+		{
+			"Key": "service.name",
+			"Value": {
+				"Type": "STRING",
+				"Value": "service-foo"
+			}
+		}
+	],
+	"ScopeMetrics": []
+}
+2024/10/17 11:19:30 Rolled: 6
+{
+	"Resource": [
+		{
+			"Key": "service.name",
+			"Value": {
+				"Type": "STRING",
+				"Value": "service-foo"
+			}
+		}
+	],
+	"ScopeMetrics": [
+		{
+			"Scope": {
+				"Name": "dice-meter",
+				"Version": "",
+				"SchemaURL": ""
+			},
+			"Metrics": [
+				{
+					"Name": "dice_rolls_total",
+					"Description": "Total number of dice rolls",
+					"Unit": "{roll}",
+					"Data": {
+						"DataPoints": [
+							{
+								"Attributes": [
+									{
+										"Key": "endpoint",
+										"Value": {
+											"Type": "STRING",
+											"Value": "rolldice"
+										}
+									}
+								],
+								"StartTime": "2024-10-17T11:19:29.210902+02:00",
+								"Time": "2024-10-17T11:19:34.210828+02:00",
+								"Value": 1
+							}
+						],
+						"Temporality": "DeltaTemporality",
+						"IsMonotonic": true
+					}
+				},
+				{
+					"Name": "dice_rolls_value_total",
+					"Description": "Total sum of dice roll values",
+					"Unit": "{roll}",
+					"Data": {
+						"DataPoints": [
+							{
+								"Attributes": [
+									{
+										"Key": "endpoint",
+										"Value": {
+											"Type": "STRING",
+											"Value": "rolldice"
+										}
+									}
+								],
+								"StartTime": "2024-10-17T11:19:29.210983+02:00",
+								"Time": "2024-10-17T11:19:34.210867+02:00",
+								"Value": 6
+							},
+							{
+								"Attributes": [
+									{
+										"Key": "endpoint",
+										"Value": {
+											"Type": "STRING",
+											"Value": "rolldice"
+										}
+									},
+									{
+										"Key": "test",
+										"Value": {
+											"Type": "STRING",
+											"Value": "foo"
+										}
+									}
+								],
+								"StartTime": "2024-10-17T11:19:29.210983+02:00",
+								"Time": "2024-10-17T11:19:34.210867+02:00",
+								"Value": 1
+							}
+						],
+						"Temporality": "DeltaTemporality",
+						"IsMonotonic": true
+					}
+				}
+			]
+		}
+	]
+}
+2024/10/17 11:19:35 Rolled: 6
+2024/10/17 11:19:36 Rolled: 2
+2024/10/17 11:19:37 Rolled: 5
+{
+	"Resource": [
+		{
+			"Key": "service.name",
+			"Value": {
+				"Type": "STRING",
+				"Value": "service-foo"
+			}
+		}
+	],
+	"ScopeMetrics": [
+		{
+			"Scope": {
+				"Name": "dice-meter",
+				"Version": "",
+				"SchemaURL": ""
+			},
+			"Metrics": [
+				{
+					"Name": "dice_rolls_total",
+					"Description": "Total number of dice rolls",
+					"Unit": "{roll}",
+					"Data": {
+						"DataPoints": [
+							{
+								"Attributes": [
+									{
+										"Key": "endpoint",
+										"Value": {
+											"Type": "STRING",
+											"Value": "rolldice"
+										}
+									}
+								],
+								"StartTime": "2024-10-17T11:19:34.210828+02:00",
+								"Time": "2024-10-17T11:19:39.21087+02:00",
+								"Value": 3
+							}
+						],
+						"Temporality": "DeltaTemporality",
+						"IsMonotonic": true
+					}
+				},
+				{
+					"Name": "dice_rolls_value_total",
+					"Description": "Total sum of dice roll values",
+					"Unit": "{roll}",
+					"Data": {
+						"DataPoints": [
+							{
+								"Attributes": [
+									{
+										"Key": "endpoint",
+										"Value": {
+											"Type": "STRING",
+											"Value": "rolldice"
+										}
+									}
+								],
+								"StartTime": "2024-10-17T11:19:34.210867+02:00",
+								"Time": "2024-10-17T11:19:39.210903+02:00",
+								"Value": 13
+							},
+							{
+								"Attributes": [
+									{
+										"Key": "endpoint",
+										"Value": {
+											"Type": "STRING",
+											"Value": "rolldice"
+										}
+									},
+									{
+										"Key": "test",
+										"Value": {
+											"Type": "STRING",
+											"Value": "foo"
+										}
+									}
+								],
+								"StartTime": "2024-10-17T11:19:34.210867+02:00",
+								"Time": "2024-10-17T11:19:39.210903+02:00",
+								"Value": 3
+							}
+						],
+						"Temporality": "DeltaTemporality",
+						"IsMonotonic": true
+					}
+				}
+			]
+		}
+	]
+}
+2024/10/17 11:19:40 Rolled: 6
+{
+	"Resource": [
+		{
+			"Key": "service.name",
+			"Value": {
+				"Type": "STRING",
+				"Value": "service-foo"
+			}
+		}
+	],
+	"ScopeMetrics": [
+		{
+			"Scope": {
+				"Name": "dice-meter",
+				"Version": "",
+				"SchemaURL": ""
+			},
+			"Metrics": [
+				{
+					"Name": "dice_rolls_total",
+					"Description": "Total number of dice rolls",
+					"Unit": "{roll}",
+					"Data": {
+						"DataPoints": [
+							{
+								"Attributes": [
+									{
+										"Key": "endpoint",
+										"Value": {
+											"Type": "STRING",
+											"Value": "rolldice"
+										}
+									}
+								],
+								"StartTime": "2024-10-17T11:19:39.21087+02:00",
+								"Time": "2024-10-17T11:19:44.211093+02:00",
+								"Value": 1
+							}
+						],
+						"Temporality": "DeltaTemporality",
+						"IsMonotonic": true
+					}
+				},
+				{
+					"Name": "dice_rolls_value_total",
+					"Description": "Total sum of dice roll values",
+					"Unit": "{roll}",
+					"Data": {
+						"DataPoints": [
+							{
+								"Attributes": [
+									{
+										"Key": "endpoint",
+										"Value": {
+											"Type": "STRING",
+											"Value": "rolldice"
+										}
+									}
+								],
+								"StartTime": "2024-10-17T11:19:39.210903+02:00",
+								"Time": "2024-10-17T11:19:44.211118+02:00",
+								"Value": 6
+							},
+							{
+								"Attributes": [
+									{
+										"Key": "endpoint",
+										"Value": {
+											"Type": "STRING",
+											"Value": "rolldice"
+										}
+									},
+									{
+										"Key": "test",
+										"Value": {
+											"Type": "STRING",
+											"Value": "foo"
+										}
+									}
+								],
+								"StartTime": "2024-10-17T11:19:39.210903+02:00",
+								"Time": "2024-10-17T11:19:44.211118+02:00",
+								"Value": 1
+							}
+						],
+						"Temporality": "DeltaTemporality",
+						"IsMonotonic": true
+					}
+				}
+			]
+		}
+	]
+}
