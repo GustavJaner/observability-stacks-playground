@@ -1,6 +1,6 @@
 services:
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:latest # 0.103.1
+    image: otel/opentelemetry-collector-contrib:0.103.1 # or :latest
     volumes:
       - ./otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
     ports:
@@ -30,8 +30,12 @@ services:
       - ./grafana-provisioning/dashboards:/etc/grafana/provisioning/dashboards
       - ./grafana-dashboards:/var/lib/grafana/dashboards
       # - ./grafana-storage:/var/lib/grafana # This will use the local volume in this directory. If it doesn't exist, it will be created. Useful for persisitng dashboards clicked in the UI
+      # - grafana-storage:/var/lib/grafana # If the Docker volume: uncomment the volumes section below
     ports:
       - 3000:3000
     depends_on:
       - prometheus
       - otel-collector
+
+# volumes:
+#  grafana-storage: {} # This will create and manage a volume in Docker. Configure grafana.volume - grafana-storage:/var/lib/grafana
