@@ -1,8 +1,6 @@
-version: '3.7'
-
 services:
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.103.1
+    image: otel/opentelemetry-collector-contrib:latest # 0.103.1
     volumes:
       - ./otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
     ports:
@@ -15,7 +13,7 @@ services:
       - 55679:55679 # zpages extension
 
   prometheus:
-    image: prom/prometheus:v2.55.0 # or :latest
+    image: prom/prometheus:latest
     volumes:
       - ./prometheus-config.yaml:/etc/prometheus/prometheus.yml
     ports:
@@ -24,7 +22,7 @@ services:
       - otel-collector
 
   grafana:
-    image: grafana/grafana:11.2.3 # or grafana/grafana-enterprise or grafana/grafana-oss
+    image: grafana/grafana:latest # or grafana/grafana-enterprise or grafana/grafana-oss
     restart: unless-stopped
     volumes:
       - ./grafana-config.ini:/etc/grafana/grafana.ini # Override default config

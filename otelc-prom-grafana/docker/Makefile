@@ -4,13 +4,13 @@ up: # Builds, (re)creates, starts, and attaches to containers for all services
 		docker-compose up -d # -d (Detached) flag runs the containers in the background
 
 up-otel-collector:
-		docker-compose up -d otel-collector
+		docker-compose up -d --no-deps otel-collector
 
 up-prometheus:
-		docker-compose up -d prometheus
+		docker-compose up -d --no-deps prometheus
 
 up-grafana:
-		docker-compose up -d grafana
+		docker-compose up -d --no-deps grafana
 
 down: # Stops and removes all the containers
 		docker-compose down

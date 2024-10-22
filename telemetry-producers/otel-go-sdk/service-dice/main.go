@@ -59,7 +59,7 @@ func newResource() (*resource.Resource, error) {
 		// resource.WithOS(),           // Discover and provide OS information.
 		// resource.WithHost(),         // Discover and provide host information.
 		resource.WithAttributes(
-			attribute.Key("service.name").String("dice-service"), // Add custom resource attributes.
+			attribute.Key("service.name").String("service-dice"), // Add custom resource attributes.
 		),
 	)
 }
