@@ -13,10 +13,19 @@ datasources:
       timeInterval: 5s
       manageAlerts: true
       prometheusType: Prometheus
-      prometheusVersion: "2.50.x"
+      prometheusVersion: "2.50.x" # Todo
       cacheLevel: None
       disableRecordingRules: false
       # incrementalQueryOverlapWindow: 10m
       # exemplarTraceIdDestinations:
         # Field with internal link pointing to data source in Grafana.
         # datasourceUid value can be anything, but it should be unique across all defined data source uids.
+
+  - name: loki
+    type: loki
+    editable: true
+    access: proxy
+    url: http://loki:3100
+    basicAuth: false
+    jsonData:
+      httpTimeout: 30s
