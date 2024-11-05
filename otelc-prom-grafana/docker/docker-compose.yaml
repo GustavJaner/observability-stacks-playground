@@ -1,6 +1,6 @@
 services:
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.103.1 # or :latest
+    image: otel/opentelemetry-collector-contrib:0.103.1 # :latest
     volumes:
       - ./otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
     ports:
@@ -13,7 +13,12 @@ services:
       - 55679:55679 # zpages extension
 
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v2.53.3 # :latest
+    # command:
+    #   - --config.file=/etc/prometheus/prometheus.yaml
+    #   - --web.enable-remote-write-receiver
+    #   - --enable-feature=exemplar-storage
+    #   - --enable-feature=native-histograms
     volumes:
       - ./prometheus-config.yaml:/etc/prometheus/prometheus.yml
     ports:
@@ -22,19 +27,43 @@ services:
       - otel-collector
 
   loki:
-    image: grafana/loki:latest
+    image: grafana/loki:3.2.1 # :latest
     ports:
       - 3100:3100
     volumes:
       - ./loki-config.yaml:/etc/loki/loki-config.yaml
 
   promtail:
-    image: grafana/promtail:latest
+    image: grafana/promtail:3.2.1 # :latest
     volumes:
       - ./promtail-config.yaml:/etc/promtail/promtail-config.yaml
 
+  tempo-init:
+    image: &tempoImage grafana/tempo:2.6.1 # :latest
+    user: root
+    entrypoint:
+      - "chown"
+      - "10001:10001"
+      - "/var/tempo"
+    volumes:
+      - ./tempo-data:/var/tempo
+
+  tempo:
+    image: *tempoImage
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./tempo-config.yaml:/etc/tempo.yaml
+      - ./tempo-data:/var/tempo
+    ports:
+      - 3200:3200 # tempo
+      - 9095:9095 # tempo grpc
+      #- 4317:4317 # otlp grpc
+      #- 4318:4318 # otlp http
+    depends_on:
+      - tempo-init
+
   grafana:
-    image: grafana/grafana:latest # or grafana/grafana-enterprise or grafana/grafana-oss
+    image: grafana/grafana:11.3.0 # :latest
     restart: unless-stopped
     volumes:
       - ./grafana-config.ini:/etc/grafana/grafana.ini # Override default config
@@ -47,7 +76,8 @@ services:
       - 3000:3000
     depends_on:
       - prometheus
-      - otel-collector
+      - loki
+      - tempo
 
 # volumes:
 #  grafana-storage: {} # This will create and manage a volume in Docker. Configure grafana.volume - grafana-storage:/var/lib/grafana

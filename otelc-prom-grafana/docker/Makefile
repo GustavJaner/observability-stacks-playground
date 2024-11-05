@@ -9,6 +9,15 @@ up-otel-collector:
 up-prometheus:
 		docker-compose up -d --no-deps prometheus
 
+up-loki:
+		docker-compose up -d --no-deps loki
+
+up-promtail:
+		docker-compose up -d --no-deps promtail
+
+up-tempo:
+		docker-compose up -d --no-deps tempo
+
 up-grafana:
 		docker-compose up -d --no-deps grafana
 
@@ -20,6 +29,15 @@ down-otel-collector:
 
 down-prometheus:
 		docker-compose down prometheus
+
+down-promtail:
+		docker-compose down promtail
+
+down-loki:
+		docker-compose down loki
+
+down-tempo:
+		docker-compose down tempo
 
 down-grafana:
 		docker-compose down grafana

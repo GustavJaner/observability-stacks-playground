@@ -1,0 +1,77 @@
+stream_over_http_enabled: true
+
+storage:
+  trace:
+    backend: local # backend configuration to use (local, gcs, s3, azure, memcached, redis)
+    wal:
+      path: /var/tempo/wal
+    local:
+      path: /var/tempo/blocks
+
+server:
+  http_listen_port: 3200
+  grpc_server_max_recv_msg_size: 1.34217728e+08
+  grpc_server_max_send_msg_size: 1.34217728e+08
+  log_level: info
+
+# Distributor: the first component in the write pipeline. Receives trace spans and forwards them to ingesters
+distributor:
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+        http:
+
+# Ingester: batches traces into blocks, creates bloom filters and indexes -> then flushes to long-term storage
+ingester:
+  max_block_duration: 5m               # cut the headblock when this much time passes. this is being set for demo purposes and should probably be left alone normally
+
+memberlist:
+  abort_if_cluster_join_fails: false
+  bind_port: 7946
+  join_members:
+  - ingester-0:7946
+  - ingester-1:7946
+  - ingester-2:7946
+
+# Query Frontend: splits incoming query requests into shards and forwards to the queriers for faster parallel processing of queries
+query_frontend:
+  max_batch_size: 5
+  trace_by_id:
+    duration_slo: 5s
+
+# Querier: queries the the ingesters/DB/cache for traces
+querier:
+  frontend_worker:
+    grpc_client_config:
+      max_recv_msg_size: 1.34217728e+08
+      max_send_msg_size: 1.34217728e+08
+  #   frontend_address: query-frontend:9095
+
+# Compactor: streams blocks from the storage backend, combine them and write them back
+compactor:
+  compaction:
+    block_retention: 1h                # overall Tempo trace retention. set for demo purposes
+
+# Metrics Generator: creates Prometheus metrics derived from the ingested traces
+metrics_generator:
+  registry:
+    collection_interval: 5s # # Interval to collect metrics and remote write them
+    stale_duration: 15m # Interval after which a series is considered stale and will be deleted from the registry. Once a metrics series is deleted it won't be emitted anymore, keeping active series low.
+    external_labels:
+      source: tempo
+      cluster: docker-compose
+  traces_storage:
+    path: /var/tempo/generator/traces
+  storage:
+    path: /var/tempo/generator/wal
+    remote_write: # A list of remote write endpoints https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write
+      - name: tempo
+        url: http://localhost:4317 # http://prometheus:9090/api/v1/write # TODO: push metrics to OTEL Collector
+        send_exemplars: true
+
+overrides:
+  defaults:
+    metrics_generator:
+      processors: [service-graphs, span-metrics, local-blocks] # enables metrics generator
+      generate_native_histograms: both
