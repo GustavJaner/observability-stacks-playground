@@ -53,7 +53,7 @@ querier:
 # Compactor: streams blocks from the storage backend, combine them and write them back
 compactor:
   compaction:
-    block_retention: 1h                # overall Tempo trace retention. set for demo purposes
+    block_retention: 1h # overall Tempo trace retention. set for demo purposes
 
 # Metrics Generator: creates Prometheus metrics derived from the ingested traces
 metrics_generator:

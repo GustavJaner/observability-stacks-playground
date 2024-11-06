@@ -12,12 +12,10 @@ import (
 	"go.opentelemetry.io/otel/metric"
 )
 
-const name = "dice-meter"
-
 var (
-	tracer = otel.Tracer(name)
+	tracer = otel.Tracer("dice-tracer")
 	// 4. Create a Meter from the Meter Provider
-	meter = otel.Meter(name)
+	meter = otel.Meter("dice-meter")
 	// 5. Create a counter from the Meter
 	rollCount metric.Int64Counter
 	rollSum   metric.Int64Counter
@@ -44,8 +42,6 @@ func rolldice(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "roll")
 	defer span.End()
 
-	// ctx := r.Context()
-
 	roll := 1 + rand.Intn(6)
 
 	log.Print("Rolled: ", roll)
@@ -53,6 +49,7 @@ func rolldice(w http.ResponseWriter, r *http.Request) {
 	rollValueAttr := attribute.Int("roll.value", roll)
 	span.SetAttributes(rollValueAttr)
 
+	// ctx := r.Context()
 	rollCount.Add(ctx, 1, metric.WithAttributes(attribute.String("endpoint", "rolldice")))
 	rollSum.Add(ctx, int64(roll), metric.WithAttributes(attribute.String("endpoint", "rolldice")))
 	// rollSum.Add(ctx, 1, metric.WithAttributes(attribute.String("endpoint", "rolldice"), attribute.String("test", "foo")))

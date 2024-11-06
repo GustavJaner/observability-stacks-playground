@@ -79,8 +79,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -195,8 +194,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -459,6 +457,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
+          "exemplar": true,
           "expr": "sum by(__name__, exported_job) ({job=\"otel-collector-prom-exporter\", exported_job=~\".+\"})",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -565,6 +564,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
+          "exemplar": true,
           "expr": "sum(rate(default_dice_rolls_total{job=\"otel-collector-prom-exporter\", exported_job=~\".+\"} [$__rate_interval]))",
           "fullMetaSearch": false,
           "hide": false,
@@ -582,6 +582,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
+          "exemplar": true,
           "expr": "sum(rate(default_dice_rolls_value_total{job=\"otel-collector-prom-exporter\", exported_job=~\".+\"} [$__rate_interval]))",
           "fullMetaSearch": false,
           "hide": false,

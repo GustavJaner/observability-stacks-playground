@@ -9,6 +9,7 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/exporters/stdout/stdoutmetric"
 	"go.opentelemetry.io/otel/propagation"
@@ -25,11 +26,11 @@ const (
 )
 
 func main() {
-	// Set up propagator.
+	// [TRACING] 1. Set up propagator.
 	prop := newPropagator()
 	otel.SetTextMapPropagator(prop)
 
-	// Set up trace provider.
+	// [TRACING] 2. Set up propagator.
 	tracerProvider, err := newTraceProvider()
 	if err != nil {
 		panic(err)
@@ -75,30 +76,21 @@ func newPropagator() propagation.TextMapPropagator {
 
 func newTraceProvider() (*trace.TracerProvider, error) {
 	ctx := context.Background() // Create a context for the gRPC exporter client
-	// var traceExporter otlptrace.Exporter
-	// var err error
+	var traceExporter *otlptrace.Exporter
+	var err error
 
-	// if grpc == true {
 	log.Println("Using gRPC traceExporter")
-	traceExporter, err := otlptracegrpc.New(
+	traceExporter, err = otlptracegrpc.New(
 		ctx,
 		otlptracegrpc.WithEndpoint("localhost:4317"),
 		otlptracegrpc.WithInsecure(),
 	)
-	// } else {
-	// 	log.Println("Using stdout traceExporter")
-	// 	traceExporter, err = stdouttrace.New( // stdout for debug purposes. Otherwise we use otlpmetricgrpc to export metrics to the OTEL Collector
-	// 		stdouttrace.WithPrettyPrint(),
-	// 	)
-	// }
-
 	if err != nil {
 		return nil, err
 	}
 
 	traceProvider := trace.NewTracerProvider(
 		trace.WithBatcher(traceExporter,
-			// Default is 5s. Set to 1s for demonstrative purposes.
 			trace.WithBatchTimeout(5*time.Second)),
 	)
 	return traceProvider, nil

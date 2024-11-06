@@ -24,7 +24,7 @@ exporters:
     namespace: default
 
   otlp:
-    endpoint: http://tempo:4319
+    endpoint: http://tempo:4319 # Export otlp traces to Tempo
     tls:
       insecure: true
 
