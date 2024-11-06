@@ -20,7 +20,9 @@ distributor:
     otlp:
       protocols:
         grpc:
+          endpoint: 0.0.0.0:4319
         http:
+          endpoint: 0.0.0.0:4320
 
 # Ingester: batches traces into blocks, creates bloom filters and indexes -> then flushes to long-term storage
 ingester:

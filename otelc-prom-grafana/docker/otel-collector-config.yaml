@@ -23,6 +23,11 @@ exporters:
     endpoint: 0.0.0.0:8889
     namespace: default
 
+  otlp:
+    endpoint: http://tempo:4319
+    tls:
+      insecure: true
+
 # Any of the components configured above must be defined in the service section to be enabled
 service:
   extensions: [zpages]
@@ -31,3 +36,6 @@ service:
     metrics:
       receivers: [otlp]
       exporters: [debug, prometheus] # Export to stdout and Prometheus
+    traces:
+      receivers: [otlp]
+      exporters: [debug, otlp]

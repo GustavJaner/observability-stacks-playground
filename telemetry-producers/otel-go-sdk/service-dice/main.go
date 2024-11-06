@@ -9,18 +9,33 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/exporters/stdout/stdoutmetric"
+	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/metric"
 	"go.opentelemetry.io/otel/sdk/metric/metricdata"
 	"go.opentelemetry.io/otel/sdk/resource"
+	"go.opentelemetry.io/otel/sdk/trace"
 )
 
 const (
 	periodicReaderIntervalSeconds = 5
+	grpc                          = true    // False will use the stdout logger as exporter. True will use the otlp gRPC exporter.
 	temporality                   = "delta" // Values: "delta" or "cumulative"
 )
 
 func main() {
+	// Set up propagator.
+	prop := newPropagator()
+	otel.SetTextMapPropagator(prop)
+
+	// Set up trace provider.
+	tracerProvider, err := newTraceProvider()
+	if err != nil {
+		panic(err)
+	}
+	otel.SetTracerProvider(tracerProvider)
+
 	// 1. Create resource
 	res, err := newResource()
 	if err != nil {
@@ -28,7 +43,6 @@ func main() {
 	}
 
 	// 2. Create a meter provider.
-	grpc := true // False will use the stdout logger as exporter. True will use the otlp gRPC exporter.
 	meterProvider, err := newMeterProvider(res, grpc)
 	if err != nil {
 		panic(err)
@@ -50,6 +64,44 @@ func main() {
 	http.HandleFunc("/rolldice", rolldice)
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
+}
+
+func newPropagator() propagation.TextMapPropagator {
+	return propagation.NewCompositeTextMapPropagator(
+		propagation.TraceContext{},
+		propagation.Baggage{},
+	)
+}
+
+func newTraceProvider() (*trace.TracerProvider, error) {
+	ctx := context.Background() // Create a context for the gRPC exporter client
+	// var traceExporter otlptrace.Exporter
+	// var err error
+
+	// if grpc == true {
+	log.Println("Using gRPC traceExporter")
+	traceExporter, err := otlptracegrpc.New(
+		ctx,
+		otlptracegrpc.WithEndpoint("localhost:4317"),
+		otlptracegrpc.WithInsecure(),
+	)
+	// } else {
+	// 	log.Println("Using stdout traceExporter")
+	// 	traceExporter, err = stdouttrace.New( // stdout for debug purposes. Otherwise we use otlpmetricgrpc to export metrics to the OTEL Collector
+	// 		stdouttrace.WithPrettyPrint(),
+	// 	)
+	// }
+
+	if err != nil {
+		return nil, err
+	}
+
+	traceProvider := trace.NewTracerProvider(
+		trace.WithBatcher(traceExporter,
+			// Default is 5s. Set to 1s for demonstrative purposes.
+			trace.WithBatchTimeout(5*time.Second)),
+	)
+	return traceProvider, nil
 }
 
 func newResource() (*resource.Resource, error) {
