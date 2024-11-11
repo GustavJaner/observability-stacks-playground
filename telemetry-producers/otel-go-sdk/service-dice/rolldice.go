@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	tracer = otel.Tracer("dice-tracer")
+	// tracer = otel.Tracer("dice-tracer")
 	// 4. Create a Meter from the Meter Provider
 	meter = otel.Meter("dice-meter")
 	// 5. Create a counter from the Meter
@@ -39,17 +39,17 @@ func init() {
 }
 
 func rolldice(w http.ResponseWriter, r *http.Request) {
-	ctx, span := tracer.Start(r.Context(), "roll")
-	defer span.End()
+	// ctx, span := tracer.Start(r.Context(), "roll")
+	// defer span.End()
 
 	roll := 1 + rand.Intn(6)
 
 	log.Print("Rolled: ", roll)
 
-	rollValueAttr := attribute.Int("roll.value", roll)
-	span.SetAttributes(rollValueAttr)
+	// rollValueAttr := attribute.Int("roll.value", roll)
+	// span.SetAttributes(rollValueAttr)
 
-	// ctx := r.Context()
+	ctx := r.Context()
 	rollCount.Add(ctx, 1, metric.WithAttributes(attribute.String("endpoint", "rolldice")))
 	rollSum.Add(ctx, int64(roll), metric.WithAttributes(attribute.String("endpoint", "rolldice")))
 	// rollSum.Add(ctx, 1, metric.WithAttributes(attribute.String("endpoint", "rolldice"), attribute.String("test", "foo")))
