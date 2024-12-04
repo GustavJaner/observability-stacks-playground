@@ -14,13 +14,13 @@ services:
 
   prometheus:
     image: prom/prometheus:v2.53.3 # :latest
-    # command:
-    #   - --config.file=/etc/prometheus/prometheus.yaml
+    command:
+      - --config.file=/etc/prometheus/prometheus.yaml
+      - --enable-feature=exemplar-storage
     #   - --web.enable-remote-write-receiver
-    #   - --enable-feature=exemplar-storage
     #   - --enable-feature=native-histograms
     volumes:
-      - ./prometheus-config.yaml:/etc/prometheus/prometheus.yml
+      - ./prometheus-config.yaml:/etc/prometheus/prometheus.yaml
     ports:
       - 9090:9090
     depends_on:

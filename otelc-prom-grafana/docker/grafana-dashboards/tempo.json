@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 1,
   "links": [],
   "panels": [
     {
@@ -173,6 +173,7 @@
       "targets": [
         {
           "editorMode": "code",
+          "exemplar": true,
           "expr": "tempo_distributor_spans_received_total{job=\"tempo\"}",
           "legendFormat": "__auto",
           "range": true,
@@ -184,6 +185,7 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
+          "exemplar": true,
           "expr": "tempo_receiver_accepted_spans{job=\"tempo\"}",
           "hide": false,
           "instant": false,
@@ -304,13 +306,14 @@
     }
   ],
   "preload": false,
+  "refresh": "5s",
   "schemaVersion": 40,
   "tags": [],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},

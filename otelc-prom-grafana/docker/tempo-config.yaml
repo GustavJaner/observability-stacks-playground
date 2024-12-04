@@ -56,24 +56,26 @@ compactor:
     block_retention: 1h # overall Tempo trace retention. set for demo purposes
 
 # Metrics Generator: creates Prometheus metrics derived from the ingested traces
-metrics_generator:
-  registry:
-    collection_interval: 5s # # Interval to collect metrics and remote write them
-    stale_duration: 15m # Interval after which a series is considered stale and will be deleted from the registry. Once a metrics series is deleted it won't be emitted anymore, keeping active series low.
-    external_labels:
-      source: tempo
-      cluster: docker-compose
-  traces_storage:
-    path: /var/tempo/generator/traces
-  storage:
-    path: /var/tempo/generator/wal
-    remote_write: # A list of remote write endpoints https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write
-      - name: tempo
-        url: http://localhost:4317 # http://prometheus:9090/api/v1/write # TODO: push metrics to OTEL Collector
-        send_exemplars: true
+# metrics_generator:
+#   registry:
+#     collection_interval: 5s # # Interval to collect metrics and remote write them
+#     stale_duration: 15m # Interval after which a series is considered stale and will be deleted from the registry. Once a metrics series is deleted it won't be emitted anymore, keeping active series low.
+#     external_labels:
+#       source: tempo
+#       cluster: docker-compose
+#   traces_storage:
+#     path: /var/tempo/generator/traces
+#   storage:
+#     path: /var/tempo/generator/wal
+#     remote_write: # A list of remote write endpoints https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write
+#       - name: tempo
+#         url: http://localhost:4317 # http://prometheus:9090/api/v1/write # TODO: push metrics to OTEL Collector?
+#         send_exemplars: true
+        # component=remote level=warn remote_name=tempo url=http://localhost:4317 msg="Failed to send batch, retrying" err="Post \"http://localhost:4317\": dial tcp [::1]:4317: connect: connection refused"
+        # Needs to be a promethues endpoint, not OTLP. So can't export to OTEL Collector OTLP receiver directly.
 
-overrides:
-  defaults:
-    metrics_generator:
-      processors: [service-graphs, span-metrics, local-blocks] # enables metrics generator
-      generate_native_histograms: both
+# overrides:
+#   defaults:
+#     metrics_generator:
+#       processors: [service-graphs, span-metrics, local-blocks] # enables metrics generator
+#       generate_native_histograms: both

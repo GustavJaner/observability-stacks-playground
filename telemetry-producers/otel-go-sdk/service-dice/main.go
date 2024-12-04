@@ -21,8 +21,8 @@ import (
 
 const (
 	periodicReaderIntervalSeconds = 5
-	grpc                          = true    // False will use the stdout logger as exporter. True will use the otlp gRPC exporter.
-	temporality                   = "delta" // Values: "delta" or "cumulative"
+	grpc                          = true         // False will use the stdout logger as exporter. True will use the otlp gRPC exporter.
+	temporality                   = "cumulative" // Values: "delta" or "cumulative"
 )
 
 func main() {

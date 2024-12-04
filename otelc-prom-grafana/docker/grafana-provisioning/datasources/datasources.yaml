@@ -18,9 +18,11 @@ datasources:
       cacheLevel: None
       disableRecordingRules: false
       # incrementalQueryOverlapWindow: 10m
-      # exemplarTraceIdDestinations:
-        # Field with internal link pointing to data source in Grafana.
-        # datasourceUid value can be anything, but it should be unique across all defined data source uids.
+      exemplarTraceIdDestinations:
+        - name: trace_id
+          internalLink: true
+          datasourceUid: tempo
+          # urlLabel: "click me!!"
 
   - name: loki
     type: loki

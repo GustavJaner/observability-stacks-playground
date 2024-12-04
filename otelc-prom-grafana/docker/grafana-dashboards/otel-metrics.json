@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 1,
+  "id": 2,
   "links": [],
   "panels": [
     {
@@ -79,7 +79,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -122,6 +123,7 @@
                 "uid": "${ds_prometheus}"
               },
               "editorMode": "code",
+              "exemplar": true,
               "expr": "count by(__name__) ({job=\"prometheus\"})",
               "instant": false,
               "legendFormat": "__auto",
@@ -194,7 +196,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -236,6 +239,7 @@
                 "uid": "${ds_prometheus}"
               },
               "editorMode": "code",
+              "exemplar": true,
               "expr": "count by(__name__) ({job=\"otel-collector-internal\"})",
               "instant": false,
               "legendFormat": "__auto",
@@ -354,6 +358,7 @@
             "uid": "${ds_prometheus}"
           },
           "editorMode": "code",
+          "exemplar": true,
           "expr": "count by(__name__) ({job=\"otel-collector-prom-exporter\"})",
           "instant": false,
           "legendFormat": "__auto",
@@ -440,8 +445,8 @@
           "displayMode": "table",
           "placement": "right",
           "showLegend": true,
-          "sortBy": "Name",
-          "sortDesc": false
+          "sortBy": "Max",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -547,8 +552,8 @@
           "displayMode": "table",
           "placement": "right",
           "showLegend": true,
-          "sortBy": "Name",
-          "sortDesc": false
+          "sortBy": "Max",
+          "sortDesc": true
         },
         "tooltip": {
           "mode": "single",
@@ -607,7 +612,7 @@
       {
         "current": {
           "text": "prometheus",
-          "value": "P1809F7CD0C75ACF3"
+          "value": "prometheus"
         },
         "name": "ds_prometheus",
         "options": [],
@@ -619,7 +624,7 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},

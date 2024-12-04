@@ -20,11 +20,17 @@ exporters:
     verbosity: detailed
 
   prometheus: # Data sources: metrics
-    endpoint: 0.0.0.0:8889
+    endpoint: 0.0.0.0:8889 # This endpoint will be scraped by Prometheus
     namespace: default
+    metric_expiration: 1m # (default = 5m): defines how long metrics are exposed without updates
+    send_timestamps: false # (default = false): if true, sends the timestamp of the underlying metric sample in the response.
+    add_metric_suffixes: true # (default = true): If false, addition of type and unit suffixes is disabled.
+    enable_open_metrics: true # (default = false): If true, metrics will be exported using the OpenMetrics format.  Exemplars are only exported in the OpenMetrics format, and only for histogram and monotonic sum (i.e. counter) metrics.
+    const_labels:
+      foo: bar
 
-  otlp:
-    endpoint: http://tempo:4319 # Export otlp traces to Tempo
+  otlp/trace:
+    endpoint: http://tempo:4319 # Export(push) otlp traces to Tempo
     tls:
       insecure: true
 
@@ -38,4 +44,4 @@ service:
       exporters: [debug, prometheus] # Export to stdout and Prometheus
     traces:
       receivers: [otlp]
-      exporters: [debug, otlp]
+      exporters: [debug, otlp/trace]
